@@ -7,7 +7,7 @@ language: zh-CN
 thinkai_listing:
   entry_type: child_skill
   card_name: 账号配置员
-  summary: 初始化公众号账号、风格卡、本地私有配置和可选发布接入。
+  summary: 初始化公众号账号、风格卡、用户本地配置和可选发布接入。
   scenarios:
     - 首次安装公众号写作员工包
     - 生成本地 USER.md

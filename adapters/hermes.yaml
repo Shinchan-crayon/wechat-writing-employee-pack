@@ -82,8 +82,8 @@ skills:
     - "references 路径通过变量解析定位"
     - "scripts 路径通过变量解析定位"
 
-# --- 私有配置层注入 ---
+# --- 用户本地配置注入 ---
 overlay:
-  source: "私有配置模板/README.md"
+  source: "用户配置模板/README.md"
   target: "${USER_PRIVATE_CONFIG}/USER.md"
   strategy: "merge_prefer_private_config"

@@ -76,8 +76,8 @@ skills:
   # id, name, role, version, language, dependencies, tools_required
   # when_to_use, references, scripts, assets 全部可用
 
-# --- 私有配置层注入 ---
+# --- 用户本地配置注入 ---
 overlay:
-  source: "私有配置模板/README.md"
+  source: "用户配置模板/README.md"
   target: "${USER_PRIVATE_CONFIG}/USER.md"
-  strategy: "merge_prefer_private_config"  # 公开默认值 + 私有配置层覆盖
+  strategy: "merge_prefer_private_config"  # 公开默认值 + 用户本地配置覆盖

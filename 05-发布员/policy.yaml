@@ -55,6 +55,6 @@ gates:
 
 security:
   allow_script_execution: true                 # API 调用需要终端
-  allow_env_read: false                        # 不读取环境变量，凭证只从本地私有配置层读取
+  allow_env_read: false                        # 不读取环境变量，凭证只从用户本地配置读取
   key_isolation: true                           # 凭证不进入日志
   retry_limit: 3                               # 同参数最多重试 3 次

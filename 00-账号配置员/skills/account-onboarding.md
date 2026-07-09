@@ -1,7 +1,7 @@
 ---
 id: account-onboarding
 name: 账号配置引导
-role: 公众号写作工作流第一步 — 配置账号、风格卡、私有 USER.md 与可选发布接入
+role: 公众号写作工作流第一步 — 配置账号、风格卡、本地 USER.md 与可选发布接入
 version: 1.0.0
 language: zh-CN
 dependencies: []
@@ -20,7 +20,7 @@ tools_required:
 ## when_to_use
 
 - Agent 加载 `公众号写作员工包` 后的第一步
-- 本地私有配置层不存在或 `USER.md` 未生成
+- 用户本地配置不存在或 `USER.md` 未生成
 - 用户说“配置账号”“启用发布员”“自动发到草稿箱”
 - 发布员启动前发现 AppID、AppSecret、网络允许列表缺失
 
@@ -38,9 +38,9 @@ tools_required:
 
 **门禁：** 用户确认继续后再进入具体配置。
 
-### Step 1 — 生成本地私有配置
+### Step 1 — 生成用户本地配置
 
-引导用户把 `${PACKAGE_ROOT}/私有配置模板/` 复制为本地私有配置层，并基于模板生成 `USER.md`。
+引导用户把 `${PACKAGE_ROOT}/用户配置模板/` 复制为用户本地配置，并基于模板生成 `USER.md`。
 
 `USER.md` 只存在用户本地，不进入公开包，不提交到 git。
 
@@ -108,7 +108,7 @@ tools_required:
 | 步骤 | 内容 | 交付物 |
 |:----|:----|:-----|
 | Step 0 | 说明配置目标 | 配置路线确认 |
-| Step 1 | 生成本地私有配置 | 本地 `USER.md` |
+| Step 1 | 生成用户本地配置 | 本地 `USER.md` |
 | Step 2 | 写作账号和风格卡 | 账号/style 配置 |
 | Step 3 | 发布能力选择 | 是否启用发布员 |
 | Step 4 | 开发者凭证引导 | AppID/AppSecret 填写位置 |
@@ -136,8 +136,8 @@ tools_required:
 
 ## references
 
-- 私有配置模板：`${PACKAGE_ROOT}/私有配置模板/README.md`
-- 发布员配置引导：`${PACKAGE_ROOT}/私有配置模板/发布员配置引导/`
+- 用户配置模板：`${PACKAGE_ROOT}/用户配置模板/README.md`
+- 发布员配置引导：`${PACKAGE_ROOT}/用户配置模板/发布员配置引导/`
 - 默认风格卡：`${PACKAGE_ROOT}/共享资源/style.md`
 - 风格卡字段说明：`${PACKAGE_ROOT}/共享资源/style-schema.md`
 

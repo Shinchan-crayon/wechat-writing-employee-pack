@@ -21,7 +21,7 @@ tools:
 
 file_access:
   read_allow:
-    - "${PACKAGE_ROOT}/私有配置模板/"
+    - "${PACKAGE_ROOT}/用户配置模板/"
     - "${PACKAGE_ROOT}/共享资源/"
     - "${PACKAGE_ROOT}/脚本/check-outbound-ip.py"
     - "${USER_PRIVATE_CONFIG}/"
@@ -47,10 +47,10 @@ gates:
   - trigger: "first_run"
     action: "check_private_overlay"
     check_items:
-      - "本地私有配置层是否存在"
+      - "用户本地配置是否存在"
       - "USER.md 是否已由模板生成"
       - "账号、工作区、风格卡是否已配置"
-    fail_message: "本地私有配置还没准备好，请先完成账号配置。"
+    fail_message: "用户本地配置还没准备好，请先完成账号配置。"
   - trigger: "publisher_requested"
     action: "check_platform_onboarding"
     check_items:
