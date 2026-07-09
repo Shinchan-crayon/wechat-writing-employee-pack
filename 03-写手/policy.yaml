@@ -1,0 +1,47 @@
+# 写手 — policy.yaml
+
+tools:
+  terminal:
+    allowed: true                              # 跑 verify 脚本、mv 文件
+    deny_patterns:
+      - "killall.*Chrome"
+      - "rm -rf /"
+      - "pip install"
+      - "npm install"
+  browser:
+    allowed: false                             # 写手不需要浏览器
+  mcp:
+    allowed: false
+
+file_access:
+  read_allow:
+    - "${PACKAGE_ROOT}/模板/"
+    - "${PACKAGE_ROOT}/脚本/"
+    - "${PACKAGE_ROOT}/参考资料/标题生成/"
+    - "${PACKAGE_ROOT}/共享资源/"
+    - "${USER_WORKSPACE}/runtime/"
+  write_allow:
+    - "${USER_WORKSPACE}/"                     # 输出 HTML
+  deny:
+    - "*.env.local"
+    - "${PACKAGE_ROOT}/模板/"         # 模板只读不写
+
+network:
+  allowed_domains: []                          # 写手不需要网络访问
+  deny_outbound_to_private: true
+
+gates:
+  - trigger: "before_write"
+    action: "require_verification_table"
+    message: "未收到核查通过的框架和数据核查表，不得动笔。"
+  - trigger: "after_write"
+    action: "run_verify_script"
+    message: "verify 脚本不通过，不得交棒给审校。"
+  - trigger: "after_title_generation"
+    action: "stop_and_wait_for_user_approval"
+    message: "以上是标题候选，请确认主标题。"
+
+security:
+  allow_script_execution: true                 # 跑 verify 脚本
+  allow_env_read: false
+  key_isolation: true

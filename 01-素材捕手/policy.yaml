@@ -1,0 +1,64 @@
+# 素材捕手 — policy.yaml
+
+# 硬边界。由 adapter 编译为各 runtime 真实权限配置。
+# 此文件不定义员工是谁/怎么说话——那些在 IDENTITY.md 和 SOUL.md 里。
+
+tools:
+  browser:
+    allowed: true
+    enforced_entrypoint: "chrome"       # 只走 Chrome 浏览器
+    deny_fallback:                      # Chrome 失败时禁止自动降级
+      - terminal_http_fetch
+      - brave
+      - google_news_rss
+  terminal:
+    allowed: true
+    deny_patterns:
+      - "killall.*Chrome"               # 禁止杀用户 Chrome 进程
+      - "rm -rf /"
+  mcp:
+    allowed: false                      # 素材捕手不需要 MCP 工具
+
+file_access:
+  read_allow:
+    - "./"
+    - "${PACKAGE_ROOT}/共享资源/"                      # 风格卡和参考文件
+    - "${USER_WORKSPACE}"               # 从 USER.md 注⼊
+  write_allow:
+    - "${USER_WORKSPACE}/runtime/"      # 中间文件（简报、框架）
+  deny:
+    - "${PACKAGE_ROOT}/模板/"  # 模板只读
+    - "*.env.local"                     # 禁止读取密钥文件
+    - "${PACKAGE_ROOT}/04-审校/skills/"  # 降AI是审校的事
+
+network:
+  allowed_domains:
+    - "x.com"
+    - "twitter.com"
+    - "duckduckgo.com"
+    - "google.com"
+    - "mp.weixin.qq.com"
+    - "github.com"
+  deny_outbound_to_private: true
+
+gates:
+  - trigger: "after_search"
+    action: "stop_and_wait_for_user_approval"
+    message: "以上是搜集到的素材，确认后我将规划文章结构。"
+  - trigger: "search_failed_or_insufficient"
+    action: "diagnose_and_wait_for_user_choice"
+    check_items:
+      - "浏览器是否可用"
+      - "目标平台是否已登录"
+      - "网络是否可访问搜索站点"
+      - "搜索关键词是否过窄"
+      - "已收集素材是否少于 3 篇"
+    message: "补充素材搜索未达标，请先按排障建议处理，不能直接进入结构规划。"
+  - trigger: "after_structure_plan"
+    action: "stop_and_wait_for_user_approval"
+    message: "以上是文章结构框架，确认后交棒给事实核查员。"
+
+security:
+  allow_script_execution: false         # 素材捕手不执行脚本
+  allow_env_read: false                 # 不读环境变量
+  key_isolation: true                   # API Key 不进入此员工上下文

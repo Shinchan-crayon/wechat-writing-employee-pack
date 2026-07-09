@@ -1,0 +1,46 @@
+id: writer
+name: 写手
+version: 1.0.0
+role: 公众号写作工作流第6-7步——拿核查通过的数据和框架，按模板写HTML + 出标题
+language: zh-CN
+
+thinkai_listing:
+  entry_type: child_skill
+  card_name: 写手
+  summary: 基于已核查框架生成公众号 HTML 正文和标题候选。
+  scenarios:
+    - 已有核查通过的文章框架
+    - 需要按公众号模板输出 HTML
+    - 需要生成可筛选的标题候选
+  prerequisites:
+    - 事实核查员已确认关键数据和来源
+    - 推荐先安装完整总包：https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  out_of_scope:
+    - 不跳过事实核查直接写作
+    - 不伪造来源或数据
+    - 不负责最终审校和归档
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+
+identity: IDENTITY.md
+soul: SOUL.md
+policy: policy.yaml
+
+skills:
+  - id: wechat-article
+    enabled: true
+    priority: 10
+    scope: steps_6_and_7
+  - id: title-generator
+    enabled: true
+    priority: 15
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported
+
+limitations:
+  codex:
+    - "HTML 模板渲染可能因文件系统限制需要适配"
+  hermes:
+    - "全功能可用"

@@ -1,0 +1,83 @@
+# Claude Code Adapter
+# 能力协商配置 — 将员工包编译为 Claude Code 运行时配置
+# 本文件不是格式转换器，而是声明：哪些包能力 -> 哪些运行时配置
+
+runtime: claude_code
+compatibility: full
+
+# --- 变量解析表 ---
+# adapter 加载时将包内 ${VAR} 替换为运行时对应路径
+variables:
+  USER_WORKSPACE:
+    source: "user_config"
+    key: "workspace.base"
+    default: "${USER_HOME}/Documents/wechat-writing-workspace"
+  PACKAGE_ROOT:
+    source: "runtime"
+    key: "package_dir"
+  USER_PRIVATE_CONFIG:
+    source: "runtime"
+    key: "private_config_dir"
+    default: "${USER_HOME}/Documents/wechat-writing-workspace/private"
+  PLATFORM_API_DOMAIN:
+    source: "user_config"
+    key: "publisher.platform.api_domain"
+  PLATFORM_WEB_DOMAIN:
+    source: "user_config"
+    key: "publisher.platform.web_domain"
+
+# --- 文件加载映射 ---
+# manifest 中的引用 → Claude Code 运行时行为
+files:
+  IDENTITY.md:
+    action: load
+    inject_to: system_prompt
+    after: "core_instructions"
+  SOUL.md:
+    action: load
+    inject_to: system_prompt
+    after: "identity"
+  policy.yaml:
+    action: compile  # 编译为 Claude Code 的工具/文件/网络权限
+
+# --- policy → 权限编译 ---
+# policy.yaml 的字段 → Claude Code 原生权限参数
+policy_mapping:
+  tools:
+    browser:
+      source: "policy.tools.browser.allowed"
+      native: "tools.browser.enabled"
+    terminal:
+      source: "policy.tools.terminal.allowed"
+      native: "tools.terminal.enabled"
+      deny_patterns: "policy.tools.terminal.deny_patterns"
+    mcp:
+      source: "policy.tools.mcp.allowed"
+      native: "tools.mcp.enabled"
+  file_access:
+    read_allow: "policy.file_access.read_allow"
+    write_allow: "policy.file_access.write_allow"
+    deny: "policy.file_access.deny"
+  network:
+    allowed_domains: "policy.network.allowed_domains"
+    deny_private: "policy.network.deny_outbound_to_private"
+  security:
+    allow_scripts: "policy.security.allow_script_execution"
+    allow_env_read: "policy.security.allow_env_read"
+  gates:
+    source: "policy.gates"
+    native: "workflow.checkpoints"
+
+# --- skill 加载策略 ---
+skills:
+  strategy: "canonical"      # 全量加载，不做降级
+  scope: "manifest.skills"   # 按 manifest 声明的 scope 限制执行范围
+  # Claude Code 支持完整的 SKILL.md frontmatter：
+  # id, name, role, version, language, dependencies, tools_required
+  # when_to_use, references, scripts, assets 全部可用
+
+# --- 私有配置层注入 ---
+overlay:
+  source: "私有配置模板/README.md"
+  target: "${USER_PRIVATE_CONFIG}/USER.md"
+  strategy: "merge_prefer_private_config"  # 公开默认值 + 私有配置层覆盖

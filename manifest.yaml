@@ -1,0 +1,35 @@
+id: wechat-writing-employee-pack
+name: 公众号写作员工包
+version: 1.0.0
+language: zh-CN
+
+workflow:
+  - id: account-configurator
+    path: 00-账号配置员/manifest.yaml
+    required: true
+  - id: content-scout
+    path: 01-素材捕手/manifest.yaml
+    required: true
+  - id: fact-checker
+    path: 02-事实核查员/manifest.yaml
+    required: true
+  - id: writer
+    path: 03-写手/manifest.yaml
+    required: true
+  - id: editor
+    path: 04-审校/manifest.yaml
+    required: true
+  - id: publisher
+    path: 05-发布员/manifest.yaml
+    required: false
+
+shared_resources: 共享资源/
+templates: 模板/
+scripts: 脚本/
+references: 参考资料/
+private_template: 私有配置模板/
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported

@@ -1,0 +1,89 @@
+# Hermes Adapter
+# 能力协商配置 — 将员工包编译为 Hermes Agent 支持的格式
+# Hermes 为目标运行时：完整加载 IDENTITY/SOUL/skill，并按 Hermes 可实施能力编译 policy
+
+runtime: hermes
+compatibility: supported
+
+# --- 变量解析表 ---
+variables:
+  USER_WORKSPACE:
+    source: "user_config"
+    key: "workspace.base"
+    default: "${USER_HOME}/Documents/wechat-writing-workspace"
+  PACKAGE_ROOT:
+    source: "runtime"
+    key: "package_dir"
+  USER_PRIVATE_CONFIG:
+    source: "runtime"
+    key: "private_config_dir"
+    default: "${USER_HOME}/Documents/wechat-writing-workspace/private"
+  PLATFORM_API_DOMAIN:
+    source: "user_config"
+    key: "publisher.platform.api_domain"
+  PLATFORM_WEB_DOMAIN:
+    source: "user_config"
+    key: "publisher.platform.web_domain"
+
+# --- 文件加载映射 ---
+files:
+  IDENTITY.md:
+    action: load
+    inject_to: system_prompt
+  SOUL.md:
+    action: load
+    inject_to: system_prompt
+    after: "identity"
+  policy.yaml:
+    action: compile_to_supported_capabilities
+
+# --- policy → 权限编译 ---
+policy_mapping:
+  tools:
+    browser:
+      # 浏览器相关能力依赖本地浏览器连接、登录状态和网络可用性
+      source: "policy.tools.browser.allowed"
+      native: "tools.browser.enabled"
+      prerequisite: "local_browser_session_available"
+    terminal:
+      source: "policy.tools.terminal.allowed"
+      native: "tools.terminal.enabled"
+    mcp:
+      source: "policy.tools.mcp.allowed"
+      native: "tools.mcp.enabled"
+  file_access:
+    read_allow: "policy.file_access.read_allow"
+    write_allow: "policy.file_access.write_allow"
+    deny: "policy.file_access.deny"
+  network:
+    allowed_domains: "policy.network.allowed_domains"
+    deny_private: "policy.network.deny_outbound_to_private"
+  security:
+    allow_scripts: "policy.security.allow_script_execution"
+    allow_env_read: "policy.security.allow_env_read"
+  gates:
+    source: "policy.gates"
+    native: "workflow.checkpoints"
+    # Hermes 通过 stop_and_wait_for_user_approval 自然停等
+
+# --- 运行时条件说明 ---
+degradations: "manifest.limitations.hermes"
+
+# --- skill 加载策略 ---
+skills:
+  strategy: "hermes_target"
+  # Hermes 加载 SKILL.md frontmatter + when_to_use + dependencies + tools_required
+  # references/scripts/assets 路径中的 ${PACKAGE_ROOT} 会解析到本员工包目录
+  # tools_required 中的浏览器能力需要本地浏览器连接、登录状态和网络可用性
+  load_rules:
+    - "加载完整的 frontmatter (id, name, role, version, language)"
+    - "when_to_use 作为 skill 触发条件"
+    - "tools_required 用于校验运行时可用工具"
+    - "references 路径通过变量解析定位"
+    - "scripts 路径通过变量解析定位"
+
+# --- 私有配置层注入 ---
+overlay:
+  source: "私有配置模板/README.md"
+  target: "${USER_PRIVATE_CONFIG}/USER.md"
+  strategy: "merge_prefer_private_config"

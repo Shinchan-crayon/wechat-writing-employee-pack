@@ -1,0 +1,67 @@
+# 账号配置员 — policy.yaml
+
+# 硬边界。由 adapter 编译为各 runtime 真实权限配置。
+# 此文件只定义工具、文件、网络、密钥隔离等硬权限。
+
+tools:
+  terminal:
+    allowed: true
+    deny_patterns:
+      - "rm -rf /"
+      - "pip install"
+      - "npm install"
+      - "echo .*app_secret"
+      - "echo .*AppSecret"
+      - "cat .*USER.md"
+  browser:
+    allowed: true
+    scope: "仅用于打开平台开发者后台和辅助用户完成配置"
+  mcp:
+    allowed: false
+
+file_access:
+  read_allow:
+    - "${PACKAGE_ROOT}/私有配置模板/"
+    - "${PACKAGE_ROOT}/共享资源/"
+    - "${PACKAGE_ROOT}/脚本/check-outbound-ip.py"
+    - "${USER_PRIVATE_CONFIG}/"
+  write_allow:
+    - "${USER_PRIVATE_CONFIG}/"
+    - "${USER_WORKSPACE}/runtime/"
+  deny:
+    - "*.env"
+    - "*.env.local"
+    - "${PACKAGE_ROOT}/00-账号配置员/policy.yaml"
+
+network:
+  allowed_domains:
+    - "${PLATFORM_WEB_DOMAIN}"
+    - "${PLATFORM_API_DOMAIN}"
+    - "api.ipify.org"
+    - "ifconfig.me"
+    - "icanhazip.com"
+  deny_outbound_to_private: true
+  log_policy: "不记录凭证字段，不记录 access_token，不记录完整 API 响应"
+
+gates:
+  - trigger: "first_run"
+    action: "check_private_overlay"
+    check_items:
+      - "本地私有配置层是否存在"
+      - "USER.md 是否已由模板生成"
+      - "账号、工作区、风格卡是否已配置"
+    fail_message: "本地私有配置还没准备好，请先完成账号配置。"
+  - trigger: "publisher_requested"
+    action: "check_platform_onboarding"
+    check_items:
+      - "平台账号是否已完成认证"
+      - "AppID 是否已填写到本地 USER.md"
+      - "AppSecret 是否已填写到本地 USER.md"
+      - "本机出口 IP 是否已加入平台允许列表"
+    fail_message: "发布员配置未完成，请先补齐缺失项。"
+
+security:
+  allow_script_execution: true
+  allow_env_read: false
+  key_isolation: true
+  retry_limit: 3

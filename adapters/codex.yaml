@@ -1,0 +1,96 @@
+# Codex Adapter
+# 能力协商配置 — 将员工包降级编译为 Codex 支持的格式
+# Codex 部分能力受限：浏览器沙箱弱、文件系统限制、不支持 MCP 白名单
+
+runtime: codex
+compatibility: degraded
+
+# --- 变量解析表 ---
+variables:
+  USER_WORKSPACE:
+    source: "user_config"
+    key: "workspace.base"
+    default: "${USER_HOME}/Documents/wechat-writing-workspace"
+  PACKAGE_ROOT:
+    source: "runtime"
+    key: "package_dir"
+  USER_PRIVATE_CONFIG:
+    source: "runtime"
+    key: "private_config_dir"
+    default: "${USER_HOME}/Documents/wechat-writing-workspace/private"
+  PLATFORM_API_DOMAIN:
+    source: "user_config"
+    key: "publisher.platform.api_domain"
+  PLATFORM_WEB_DOMAIN:
+    source: "user_config"
+    key: "publisher.platform.web_domain"
+
+# --- 文件加载映射 ---
+files:
+  IDENTITY.md:
+    action: load
+    inject_to: system_prompt
+  SOUL.md:
+    action: load
+    inject_to: system_prompt
+    after: "identity"
+  policy.yaml:
+    action: compile_partial  # 只编译 Codex 支持的部分
+
+# --- policy → 权限编译（部分降级） ---
+policy_mapping:
+  tools:
+    browser:
+      source: "policy.tools.browser.allowed"
+      native: "tools.browser.enabled"
+      # Codex 浏览器受限：enforced_entrypoint 和 deny_fallback 无法实施
+      note: "浏览器工具能力受限，X/Twitter 搜索可能需要降级为 API 方式"
+    terminal:
+      source: "policy.tools.terminal.allowed"
+      native: "tools.terminal.enabled"
+      denied_actions:
+        # Codex 不支持 deny_patterns，改为列禁令
+        - "禁止杀 Chrome 进程"
+        - "禁止安装包（pip/npm）"
+    mcp:
+      # Codex 不支持 MCP 白名单，直接禁用
+      native: "tools.mcp.enabled"
+      enforced: false
+  file_access:
+    read_allow: "policy.file_access.read_allow"
+    write_allow: "policy.file_access.write_allow"
+    deny: "policy.file_access.deny"
+    # Codex 文件系统受限，某些路径可能不可达
+    fallback: "warn_and_continue"
+  network:
+    allowed_domains: "policy.network.allowed_domains"
+    deny_private: "policy.network.deny_outbound_to_private"
+  security:
+    allow_scripts: "policy.security.allow_script_execution"
+    allow_env_read: "policy.security.allow_env_read"
+  gates:
+    source: "policy.gates"
+    native: "workflow.checkpoints"
+    # Codex 不支持自动停等，改为用户提示
+    fallback: "prompt_user_for_approval"
+
+# --- 降级列表 ---
+# 对 manifest 中 limitations.codex 的每一行自动生效
+degradations: "manifest.limitations.codex"
+
+# --- skill 加载策略 ---
+skills:
+  strategy: "degraded"
+  # Codex 加载完整 frontmatter，但：
+  # - tools_required 中的 browser 工具降级
+  # - references 路径中的外部 skill 引用需要本地化
+  # - scripts 中的 Python 脚本取决于 Codex 沙箱是否允许
+  strip_if_unsupported:
+    - when: "tools_required contains browser_navigate and browser not available"
+      action: "notify_user_cannot_execute"
+
+# --- 私有配置层注入 ---
+overlay:
+  source: "私有配置模板/README.md"
+  target: "${USER_PRIVATE_CONFIG}/USER.md"
+  strategy: "merge_prefer_private_config"

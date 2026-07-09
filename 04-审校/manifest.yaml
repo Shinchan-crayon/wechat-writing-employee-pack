@@ -1,0 +1,46 @@
+id: editor
+name: 审校
+version: 1.0.0
+role: 公众号写作工作流第9-11步——降AI、9项自检、日期核实、归档
+language: zh-CN
+
+thinkai_listing:
+  entry_type: child_skill
+  card_name: 审校
+  summary: 对成稿进行降 AI 味、9 项自检、日期核实和归档。
+  scenarios:
+    - 公众号 HTML 成稿需要发布前审校
+    - 需要检查 AI 味、排版、事实表达和风险表述
+    - 需要将最终稿归档
+  prerequisites:
+    - 写手已交付 HTML 正文和标题候选
+    - 推荐先安装完整总包：https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  out_of_scope:
+    - 不重写整篇文章结构
+    - 不放过未核实日期
+    - 不负责平台发布
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+
+identity: IDENTITY.md
+soul: SOUL.md
+policy: policy.yaml
+
+skills:
+  - id: anti-ai
+    enabled: true
+    priority: 10
+  - id: wechat-article
+    enabled: true
+    priority: 20
+    scope: steps_9_to_11
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported
+
+limitations:
+  codex:
+    - "文件归档可能受文件系统限制"
+  hermes:
+    - "全功能可用"

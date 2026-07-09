@@ -1,0 +1,52 @@
+# 事实核查员 — policy.yaml
+
+tools:
+  browser:
+    allowed: true
+    enforced_entrypoint: "chrome"
+    deny_fallback:
+      - terminal_http_fetch
+      - brave
+  terminal:
+    allowed: true                            # 需要跑 Python 做换算
+    deny_patterns:
+      - "killall.*Chrome"
+      - "rm -rf /"
+      - "pip install"
+      - "npm install"
+  mcp:
+    allowed: false
+
+file_access:
+  read_allow:
+    - "${PACKAGE_ROOT}/参考资料/事实核查/"
+    - "${PACKAGE_ROOT}/共享资源/"
+    - "${USER_WORKSPACE}/runtime/"
+  write_allow:
+    - "${USER_WORKSPACE}/runtime/"           # 核查表输出
+  deny:
+    - "*.env.local"
+    - "${PACKAGE_ROOT}/模板/"
+
+network:
+  allowed_domains:
+    - "x.com"
+    - "duckduckgo.com"
+    - "google.com"
+    - "*.sec.gov"                            # 财报查证
+    - "*.ir.*"                               # IR 页面
+    - "github.com"
+  deny_outbound_to_private: true
+
+gates:
+  - trigger: "after_data_verification_table"
+    action: "stop_if_not_all_green"
+    message: "核查表有未通过项，不得交棒给写手。"
+  - trigger: "after_fact_check"
+    action: "stop_and_wait_for_user_approval"
+    message: "事实核查已通过。是否开始降AI处理？"
+
+security:
+  allow_script_execution: true               # 需要跑 Python 换算
+  allow_env_read: false
+  key_isolation: true

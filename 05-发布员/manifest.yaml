@@ -1,0 +1,62 @@
+id: publisher
+name: 发布员
+version: 1.0.0
+role: 将审校归档的 HTML 推送到平台草稿箱（可选扩展）
+language: zh-CN
+
+thinkai_listing:
+  entry_type: child_skill
+  card_name: 发布员
+  summary: 可选扩展，把审校归档的 HTML 推送到平台草稿箱，不最终发布。
+  scenarios:
+    - 已完成平台凭证和网络允许列表配置
+    - 需要把归档 HTML 创建为平台草稿
+    - 需要发布前保留人工最终确认
+  prerequisites:
+    - 审校已完成归档
+    - 账号配置员已完成 AppID、AppSecret 和网络允许列表配置
+    - 推荐先安装完整总包：https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  out_of_scope:
+    - 不最终群发或正式发布
+    - 不读取聊天中的密钥
+    - 不绕过平台权限和网络限制
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+
+# ⚠️ 此员工为可选。是否启用由 00-账号配置员 在首次配置时询问。
+optional: true
+
+# 启用发布员需要的配置项。安装后由配置引导生成具体接入步骤。
+requires_config:
+  - platform_credentials
+  - network_allowlist
+
+# Agent 检测到 requires_config 未满足时的触发行为。
+onboarding_trigger:
+  message: |
+    发布员需要先由「账号配置员」完成 AppID、AppSecret 和网络允许列表配置。
+    未配置时不启动发布员。
+  on_yes: "回到 00-账号配置员，按配置向导完成平台接入。"
+  on_no: "跳过发布员，仅使用写作员工完成写稿流程。"
+
+identity: IDENTITY.md
+soul: SOUL.md
+policy: policy.yaml
+
+skills:
+  - id: wechat-article
+    enabled: true
+    priority: 10
+    scope: "平台草稿发布（API 方式为主，浏览器方式为备用）"
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported
+
+limitations:
+  codex:
+    - "浏览器操控发布可能受 sandbox 限制"
+  hermes:
+    - "浏览器操控发布依赖本地浏览器连接、登录状态和平台页面可访问性"
+  all:
+    - "API 发布需要平台完成认证并配置网络权限"

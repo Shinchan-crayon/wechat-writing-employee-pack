@@ -1,0 +1,53 @@
+id: account-configurator
+name: 账号配置员
+version: 1.0.0
+role: 公众号写作工作流第一步——引导用户完成账号、风格卡与可选发布接入配置
+language: zh-CN
+
+thinkai_listing:
+  entry_type: child_skill
+  card_name: 账号配置员
+  summary: 初始化公众号账号、风格卡、本地私有配置和可选发布接入。
+  scenarios:
+    - 首次安装公众号写作员工包
+    - 生成本地 USER.md
+    - 配置账号风格卡
+    - 引导可选发布员接入
+  prerequisites:
+    - 推荐先安装完整总包：https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  out_of_scope:
+    - 不写文章正文
+    - 不读取未授权的密钥文件
+    - 不把 AppSecret、access_token 或任何凭证写进公开包
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+
+identity: IDENTITY.md
+soul: SOUL.md
+policy: policy.yaml
+
+skills:
+  - id: account-onboarding
+    enabled: true
+    priority: 10
+    scope: account_and_publisher_setup
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported
+
+requires_config:
+  - workspace
+  - accounts
+  - style
+  - publisher_optional
+
+handoff:
+  on_config_ready: "交棒给素材捕手，进入素材读取与写作准备。"
+  on_publisher_skipped: "记录用户暂不启用发布员，仅保留写作闭环。"
+
+limitations:
+  codex:
+    - "网络出口 IP 查询取决于运行时是否允许访问公网 IP 查询服务"
+  hermes:
+    - "浏览器引导依赖本地浏览器连接和登录状态，必要时由用户手动打开开发者平台"

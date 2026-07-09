@@ -1,0 +1,52 @@
+# 审校 — policy.yaml
+
+tools:
+  terminal:
+    allowed: true                              # date 命令、mv 归档、verify 脚本
+    deny_patterns:
+      - "killall.*Chrome"
+      - "rm -rf /"
+      - "pip install"
+      - "npm install"
+  browser:
+    allowed: false                             # 审校不需要浏览器
+  mcp:
+    allowed: false
+
+file_access:
+  read_allow:
+    - "${PACKAGE_ROOT}/04-审校/skills/"
+    - "${PACKAGE_ROOT}/脚本/"
+    - "${PACKAGE_ROOT}/参考资料/事实核查/"
+    - "${PACKAGE_ROOT}/共享资源/"
+    - "${USER_WORKSPACE}/"
+  write_allow:
+    - "${USER_WORKSPACE}/"                     # 写入降AI后的HTML + 归档
+    - "${USER_WORKSPACE}/"            # 归档目录
+  deny:
+    - "*.env.local"
+    - "${PACKAGE_ROOT}/模板/"         # 模板只读不写
+
+network:
+  allowed_domains: []                          # 审校不需要网络访问
+  deny_outbound_to_private: true
+
+gates:
+  - trigger: "before_deai"
+    action: "require_user_confirmation"
+    message: "事实核查已通过。是否开始降AI处理？"
+  - trigger: "before_archive"
+    action: "run_date_check"
+    command: "date +%-m.%-d"
+    message: "归档日期已确认为 $(date +%-m.%-d)"
+  - trigger: "before_archive"
+    action: "run_verify_script"
+    message: "verify 不通过，不准归档。"
+  - trigger: "checklist"
+    action: "run_9_point_self_check"
+    message: "9项自检任一项未通过=打回。"
+
+security:
+  allow_script_execution: true                 # verify 脚本
+  allow_env_read: false
+  key_isolation: true

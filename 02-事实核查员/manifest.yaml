@@ -1,0 +1,43 @@
+id: fact-checker
+name: 事实核查员
+version: 1.0.0
+role: 公众号写作工作流第5步和第8步——涉及数字时建核查表、写完逐句反查来源
+language: zh-CN
+
+thinkai_listing:
+  entry_type: child_skill
+  card_name: 事实核查员
+  summary: 对数据、价格、案例和引用进行写前建表核查与写后逐句反查。
+  scenarios:
+    - 文章涉及价格、融资、参数、排名或监管信息
+    - 写作前需要数据核查表
+    - 成稿后需要逐句反查来源
+  prerequisites:
+    - 素材捕手已交付候选框架和来源
+    - 推荐先安装完整总包：https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  out_of_scope:
+    - 不为了流畅性放过未经确认的数据
+    - 不把二手转述当成最终来源
+    - 不负责正文润色
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+
+identity: IDENTITY.md
+soul: SOUL.md
+policy: policy.yaml
+
+skills:
+  - id: wechat-article
+    enabled: true
+    priority: 10
+    scope: steps_5_and_8
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported
+
+limitations:
+  codex:
+    - "终端工具受限，复杂换算可能需要手动计算"
+  hermes:
+    - "浏览器搜索依赖本地浏览器连接、登录状态和网络可用性"

@@ -1,0 +1,43 @@
+id: content-scout
+name: 素材捕手
+version: 1.0.0
+role: 公众号写作工作流第1-4步——锁定风格、读取源素材、搜索补充、规划结构
+language: zh-CN
+
+thinkai_listing:
+  entry_type: child_skill
+  card_name: 素材捕手
+  summary: 读取账号风格和源素材，搜索补充信息，并搭建公众号文章框架。
+  scenarios:
+    - 有选题或源素材，需要整理成写作框架
+    - 需要补充 3-5 个可靠来源
+    - 需要先确认文章结构再进入写作
+  prerequisites:
+    - 账号配置员已完成本地 USER.md、账号和风格卡配置
+    - 推荐先安装完整总包：https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  out_of_scope:
+    - 不直接写完整文章
+    - 不跳过用户确认直接交给写手
+    - 不替代事实核查员做最终核查
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+
+identity: IDENTITY.md
+soul: SOUL.md
+policy: policy.yaml
+
+skills:
+  - id: wechat-article
+    enabled: true
+    priority: 10
+    scope: steps_1_to_4
+
+compatibility:
+  claude_code: true
+  codex: degraded
+  hermes: supported
+
+limitations:
+  codex:
+    - "浏览器工具能力受限，X/Twitter 搜索可能需降级为 API 方式"
+  hermes:
+    - "浏览器搜索依赖本地浏览器连接、登录状态和网络可用性"
