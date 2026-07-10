@@ -141,6 +141,7 @@ npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
 ```
 公众号写作员工包/
 ├── README.md
+├── SKILL.md                       # npx skills add 识别的总包入口
 ├── 首次运行自检与故障反馈.md      # 用户首次试用和报错反馈说明
 ├── manifest.yaml                 # 包总入口，声明员工工作流
 ├── adapters/                      # 能力协商配置
