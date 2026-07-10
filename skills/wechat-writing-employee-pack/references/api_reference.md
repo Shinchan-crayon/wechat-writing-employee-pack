@@ -9,7 +9,7 @@
 安装总包：
 
 ```bash
-npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/tree/main/skills/wechat-writing-employee-pack
 ```
 
 第一次使用时，对 AI 助手说：
@@ -173,4 +173,3 @@ npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
 - 发布员默认关闭，只创建草稿，不做最终发布。
 - 涉及数据、价格、融资、排名、案例和引用时，应先核查再写正文。
 - 用户明确要求快速草稿时，也应至少保留事实风险提示。
-

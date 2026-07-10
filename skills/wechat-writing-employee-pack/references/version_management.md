@@ -4,12 +4,12 @@
 
 ## 当前版本
 
-当前公开版本：`v1.0.0`
+当前公开版本：`v1.0.2`
 
 对应安装地址：
 
 ```bash
-npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/tree/main/skills/wechat-writing-employee-pack
 ```
 
 ## 版本号规则
@@ -121,7 +121,33 @@ v1.0.0 -> v2.0.0
 - 发布员说明是否明确只创建草稿，不最终发布
 - ThinkAI 上架文案是否和 GitHub 公开文档分开维护
 
-## 首版记录
+## 版本记录
+
+### v1.0.2
+
+当前公开版本。
+
+包含：
+
+- 为 6 个员工子 Skill 补充独立 README 入口
+- 统一子 Skill 的推荐安装命令，仍指向完整总包
+- 明确子 Skill 可单独展示，但不建议脱离总包单独运行
+
+影响范围：
+
+- 不改变工作流顺序
+- 不需要已安装用户重新配置 `USER.md`
+- 不改变发布员安全边界
+
+### v1.0.1
+
+修复总包安装路径，确保安装后包含完整工作流。
+
+包含：
+
+- 将完整工作流移动到标准 skill 子目录
+- 修正公开安装命令
+- 确保安装后包含 6 个员工、共享资源、模板、脚本和参考资料
 
 ### v1.0.0
 
@@ -139,4 +165,3 @@ v1.0.0 -> v2.0.0
 - 用户配置模板
 - 公众号 HTML 模板
 - 首次运行自检与故障反馈说明
-

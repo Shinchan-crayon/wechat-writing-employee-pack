@@ -1,6 +1,6 @@
 id: publisher
 name: 发布员
-version: 1.0.0
+version: 1.0.2
 role: 将审校归档的 HTML 推送到平台草稿箱（可选扩展）
 language: zh-CN
 
@@ -20,7 +20,7 @@ thinkai_listing:
     - 不最终群发或正式发布
     - 不读取聊天中的密钥
     - 不绕过平台权限和网络限制
-  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/tree/main/skills/wechat-writing-employee-pack
 
 # ⚠️ 此员工为可选。是否启用由 00-账号配置员 在首次配置时询问。
 optional: true

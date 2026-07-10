@@ -1,6 +1,6 @@
 id: account-configurator
 name: 账号配置员
-version: 1.0.0
+version: 1.0.2
 role: 公众号写作工作流第一步——引导用户完成账号、风格卡与可选发布接入配置
 language: zh-CN
 
@@ -19,7 +19,7 @@ thinkai_listing:
     - 不写文章正文
     - 不读取未授权的密钥文件
     - 不把 AppSecret、access_token 或任何凭证写进公开包
-  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/tree/main/skills/wechat-writing-employee-pack
 
 identity: IDENTITY.md
 soul: SOUL.md

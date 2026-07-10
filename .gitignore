@@ -8,3 +8,5 @@ USER.md
 private/
 workspace/
 本地上架资料/
+.agents/
+skills-lock.json

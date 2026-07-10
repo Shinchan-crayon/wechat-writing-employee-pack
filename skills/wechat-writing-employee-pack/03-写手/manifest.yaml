@@ -1,6 +1,6 @@
 id: writer
 name: 写手
-version: 1.0.0
+version: 1.0.2
 role: 公众号写作工作流第6-7步——拿核查通过的数据和框架，按模板写HTML + 出标题
 language: zh-CN
 
@@ -19,7 +19,7 @@ thinkai_listing:
     - 不跳过事实核查直接写作
     - 不伪造来源或数据
     - 不负责最终审校和归档
-  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
+  recommended_install: npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/tree/main/skills/wechat-writing-employee-pack
 
 identity: IDENTITY.md
 soul: SOUL.md
