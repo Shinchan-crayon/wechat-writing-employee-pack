@@ -96,12 +96,12 @@ npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/t
 
 ## 第一次应该怎么跑
 
-第一次交付给用户时，建议先阅读并执行：[首次运行自检与故障反馈.md](./skills/wechat-writing-employee-pack/首次运行自检与故障反馈.md)。
+第一次交付给用户时，建议先阅读并执行：[首次运行自检与故障反馈.md](./首次运行自检与故障反馈.md)。
 
 首次加载本包时，Agent 应按以下顺序处理：
 
 1. 检查用户本地配置是否存在
-2. 引导用户基于 `skills/wechat-writing-employee-pack/用户配置模板/README.md` 生成 `USER.md`
+2. 引导用户基于 `用户配置模板/README.md` 生成 `USER.md`
 3. 填写公众号账号、工作区、风格卡
 4. 询问是否启用发布员
 5. 如启用发布员，引导用户获取 AppID、AppSecret，查询本机出口 IP，并完成平台网络允许列表配置
@@ -109,7 +109,7 @@ npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/t
 
 ## 写作风格怎么控制
 
-`skills/wechat-writing-employee-pack/共享资源/style.md` 提供了一份参考风格（适配科技/财经类公众号，说话犀利、短句、有网感）。
+`共享资源/style.md` 提供了一份参考风格（适配科技/财经类公众号，说话犀利、短句、有网感）。
 
 **这不是唯一风格。** 用户可以：
 1. 直接用这份风格
@@ -141,26 +141,47 @@ npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack/t
 ```
 公众号写作员工包/
 ├── README.md
-├── .gitignore
-├── skills/
-│   └── wechat-writing-employee-pack/
-│       ├── SKILL.md               # npx skills add 识别的完整总包入口
-│       ├── README.md              # 安装后随包携带的使用说明
-│       ├── 首次运行自检与故障反馈.md
-│       ├── manifest.yaml          # 包总入口，声明员工工作流
-│       ├── 00-账号配置员/
-│       ├── 01-素材捕手/
-│       ├── 02-事实核查员/
-│       ├── 03-写手/
-│       ├── 04-审校/
-│       ├── 05-发布员/
-│       ├── 共享资源/
-│       ├── 参考资料/
-│       ├── 模板/
-│       ├── 用户配置模板/
-│       ├── 脚本/
-│       ├── adapters/
-│       └── references/
+├── SKILL.md                       # npx skills add 识别的总包入口
+├── 首次运行自检与故障反馈.md      # 用户首次试用和报错反馈说明
+├── manifest.yaml                 # 包总入口，声明员工工作流
+├── adapters/                      # 能力协商配置
+│   ├── claude-code.yaml
+│   ├── codex.yaml
+│   └── hermes.yaml
+├── 模板/                          # 写手生成 HTML 使用的包内模板
+│   └── article.html
+├── 脚本/                          # 包内校验脚本
+│   ├── verify-article.py
+│   └── check-outbound-ip.py
+├── 参考资料/                      # 包内 references，避免依赖外部 skills
+│   ├── 标题生成/
+│   ├── 事实核查/
+│   └── 降AI/
+├── references/                    # ThinkAI 前台展示用公开资源说明
+│   ├── api_reference.md
+│   └── version_management.md
+├── 共享资源/                        # 共享资源
+│   ├── README.md                  # 风格卡使用说明
+│   ├── style.md                   # 写作风格卡（模板）
+│   ├── style-schema.md            # 风格卡字段定义
+│   ├── banned-words.md            # 禁用词表
+│   ├── formatting-rules.md        # 排版规则
+│   └── pitfalls.md                # 踩坑大全
+├── 用户配置模板/       # 本地配置示例（不包含真实用户配置）
+│   ├── README.md                  # USER.md 填写指南
+│   └── 发布员配置引导/      # 发布员配置引导（安装后生成到本地）
+├── 00-账号配置员/
+│   ├── manifest.yaml
+│   ├── IDENTITY.md / SOUL.md / policy.yaml
+│   └── skills/
+├── 01-素材捕手/
+│   ├── manifest.yaml
+│   ├── IDENTITY.md / SOUL.md / policy.yaml
+│   └── skills/
+├── 02-事实核查员/
+├── 03-写手/
+├── 04-审校/
+└── 05-发布员/                     # 可选
 ```
 
 ## 兼容性
