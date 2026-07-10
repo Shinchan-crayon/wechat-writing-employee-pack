@@ -156,6 +156,9 @@ npx skills add https://github.com/Shinchan-crayon/wechat-writing-employee-pack
 │   ├── 标题生成/
 │   ├── 事实核查/
 │   └── 降AI/
+├── references/                    # ThinkAI 前台展示用公开资源说明
+│   ├── api_reference.md
+│   └── version_management.md
 ├── 共享资源/                        # 共享资源
 │   ├── README.md                  # 风格卡使用说明
 │   ├── style.md                   # 写作风格卡（模板）
